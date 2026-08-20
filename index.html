@@ -19,6 +19,26 @@
   <link rel="stylesheet" href="src/styles/components.css" />
   <link rel="stylesheet" href="src/styles/viewer.css" />
   <link rel="stylesheet" href="src/styles/admin.css" />
+
+  <script>
+    // Pairs with the redirect in 404.html: if we arrived here carrying a
+    // "?p=/intended/path" query param, decode it and swap the browser's
+    // visible URL back to the pretty route via replaceState — BEFORE the
+    // router (loaded below, as a deferred module) ever looks at the URL.
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var restoredPath = params.get("p");
+      if (restoredPath === null) return;
+      params.delete("p");
+      var query = params.toString();
+      var newUrl =
+        window.location.pathname.replace(/\/$/, "") +
+        restoredPath +
+        (query ? "?" + query : "") +
+        window.location.hash;
+      window.history.replaceState(null, "", newUrl || "/");
+    })();
+  </script>
 </head>
 <body>
   <div class="app-shell">

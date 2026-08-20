@@ -1,3 +1,5 @@
+import { CONFIG } from "../config.js";
+
 type Route = {
   pattern: RegExp;
   paramNames: string[];
@@ -8,18 +10,18 @@ const routes: Route[] = [];
 let notFoundHandler: () => void = () => {};
 
 /**
- * The directory index.html was actually loaded from. On a GitHub Pages
- * *project* site this is "/repo-name/", not "/" — the app is deployed
- * under a subpath, not the domain root. Every route in this file is a
- * single top-level segment (e.g. /work, /admin, /:slug), so the base path
- * is reliably "everything up to and including the last '/'" in whatever
- * pathname the browser currently shows, whether that's the bare base
- * ("/repo-name/"), a route directly under it ("/repo-name/work"), or a
- * hard refresh on a deep link served via 404.html.
+ * The repo-prefix portion of the URL on a GitHub Pages project site, e.g.
+ * "/repo-name/". Computed by keeping exactly CONFIG.PATH_SEGMENTS_TO_KEEP
+ * leading path segments — NOT by guessing from slash positions in the
+ * current URL, because that guess breaks the moment a path has (or is
+ * missing) a trailing slash. This must stay in sync with the equivalent
+ * constant in /404.html; see that file's comment for the full mechanism
+ * (a 404→index.html redirect that survives any path shape).
  */
 const BASE_PATH = (() => {
-  const path = location.pathname;
-  return path.slice(0, path.lastIndexOf("/") + 1) || "/";
+  const segments = location.pathname.split("/").filter(Boolean);
+  const kept = segments.slice(0, CONFIG.PATH_SEGMENTS_TO_KEEP);
+  return "/" + (kept.length ? kept.join("/") + "/" : "");
 })();
 
 function toActualPath(logicalPath: string): string {
@@ -28,11 +30,14 @@ function toActualPath(logicalPath: string): string {
 }
 
 function toLogicalPath(actualPath: string): string {
-  if (actualPath.startsWith(BASE_PATH)) {
-    const rest = actualPath.slice(BASE_PATH.length);
-    return "/" + rest;
+  const normalized = actualPath.replace(/\/+$/, "") || "/"; // trailing slash never carries route meaning here
+  const basePrefix = BASE_PATH.slice(0, -1); // BASE_PATH always ends in "/": "" at true root, "/repo-name" otherwise
+  if (!basePrefix) return normalized; // deployed at the domain root — no prefix to strip
+  if (normalized.startsWith(basePrefix)) {
+    const rest = normalized.slice(basePrefix.length);
+    return rest === "" ? "/" : rest;
   }
-  return actualPath;
+  return normalized;
 }
 
 function compile(path: string): { pattern: RegExp; paramNames: string[] } {

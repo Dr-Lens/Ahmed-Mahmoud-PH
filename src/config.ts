@@ -24,6 +24,17 @@ export const CONFIG = {
     whatsapp: "+201111714320", // international format, used for wa.me links
   },
 
+  /**
+   * How many leading URL segments are the GitHub Pages *repo* prefix rather
+   * than part of the app's own route. Must match `segmentsToKeep` in
+   * /404.html — see the comment there for why these two values must agree.
+   *   - 1 → a GitHub *project* page: https://username.github.io/repo-name/...
+   *         (this is the default — true for any repo not named username.github.io)
+   *   - 0 → a GitHub *user/org* page (repo named username.github.io) or a
+   *         custom domain served at its root
+   */
+  PATH_SEGMENTS_TO_KEEP: 1,
+
   /** Local session storage key. The token itself is opaque and validated server-side. */
   SESSION_STORAGE_KEY: "amph_admin_session",
 
