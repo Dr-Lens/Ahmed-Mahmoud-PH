@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AHMED MAHMOUD PH — Photographer &amp; Photo Editor</title>
+  <meta name="description" content="Editorial wedding, portrait, fashion and commercial photography by Ahmed Mahmoud." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/public/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/public/icons/icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/src/styles/tokens.css" />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/components.css" />
+  <link rel="stylesheet" href="/src/styles/viewer.css" />
+  <link rel="stylesheet" href="/src/styles/admin.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header" data-public-chrome>
+      <a href="/" data-link class="site-header__logo-link" aria-label="AHMED MAHMOUD PH — Home">
+        <img src="/public/assets/logo.webp" alt="AHMED MAHMOUD PH" class="site-header__logo" />
+      </a>
+      <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-label="Open menu">
+        <span class="menu-toggle__bar"></span>
+        <span class="menu-toggle__bar"></span>
+        <span class="menu-toggle__bar"></span>
+      </button>
+    </header>
+
+    <main id="outlet"></main>
+
+    <footer class="site-footer" data-public-chrome>
+      &copy; <span id="year"></span> AHMED MAHMOUD PH. All rights reserved.
+    </footer>
+  </div>
+
+  <div class="menu-overlay" data-menu-overlay></div>
+
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+  </script>
+  <script type="module" src="/dist/main.js"></script>
+</body>
+</html>

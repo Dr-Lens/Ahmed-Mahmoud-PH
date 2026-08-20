@@ -1,0 +1,11 @@
+import { apiGet, apiPost } from "./client.js";
+export const getSettings = () => apiGet("getSettings");
+export const updateSettings = (patch) => apiPost("updateSettings", { patch });
+export const getCategories = () => apiGet("getCategories");
+export const getServices = () => apiGet("getServices");
+export const updateService = (service_id, patch) => apiPost("updateService", { service_id, patch });
+export const getSocial = () => apiGet("getSocial");
+export const updateSocial = (links) => apiPost("updateSocial", { links });
+export const getBeforeAfter = () => apiGet("getBeforeAfter");
+export const createBeforeAfter = (project) => apiPost("createBeforeAfter", { project });
+export const deleteBeforeAfter = (project_id) => apiPost("deleteBeforeAfter", { project_id });
