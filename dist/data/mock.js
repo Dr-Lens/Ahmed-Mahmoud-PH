@@ -30,90 +30,12 @@ const categories = [
     { category_id: "c3", name: "مناسبات", slug: "event", description: "", visible: true, sort_order: 3 },
     { category_id: "c4", name: "أزياء", slug: "fashion", description: "", visible: true, sort_order: 4 },
 ];
-const albums = [
-    {
-        album_id: "a1",
-        title: "أحمد وسارة",
-        slug: "wedding-ahmed-sara",
-        category: "زفاف",
-        description: "قصة زفاف تجريبية. استبدلها بألبوم وصور حقيقية من لوحة التحكم.",
-        location: "القاهرة",
-        date: "2026-04-12",
-        cover_url: PLACEHOLDER_IMG("wedding-cover", 1200, 1500),
-        featured: true,
-        visible: true,
-        status: "PUBLIC",
-        sort_order: 1,
-        created_at: "2026-04-13T10:00:00Z",
-        photo_count: 8,
-    },
-    {
-        album_id: "a2",
-        title: "جلسة بورتريه استوديو",
-        slug: "studio-portraits",
-        category: "بورتريه",
-        description: "جلسة بورتريه تجريبية.",
-        location: "استوديو القاهرة",
-        date: "2026-03-02",
-        cover_url: PLACEHOLDER_IMG("portrait-cover", 1200, 1500),
-        featured: true,
-        visible: true,
-        status: "PUBLIC",
-        sort_order: 2,
-        created_at: "2026-03-03T10:00:00Z",
-        photo_count: 6,
-    },
-    {
-        album_id: "a3",
-        title: "تحرير أزياء نور",
-        slug: "nour-fashion-editorial",
-        category: "أزياء",
-        description: "تحرير أزياء تجريبي.",
-        location: "وسط القاهرة",
-        date: "2026-01-20",
-        cover_url: PLACEHOLDER_IMG("fashion-cover", 1500, 1200),
-        featured: false,
-        visible: true,
-        status: "PUBLIC",
-        sort_order: 3,
-        created_at: "2026-01-21T10:00:00Z",
-        photo_count: 5,
-    },
-];
-const aspectSeeds = [
-    ["p1", 1200, 1600], // portrait
-    ["p2", 1600, 1067], // landscape
-    ["p3", 1200, 1200], // square
-    ["p4", 1200, 1700],
-    ["p5", 1600, 1067],
-    ["p6", 1200, 1200],
-    ["p7", 1200, 1700],
-    ["p8", 1600, 1067],
-];
-function buildPhotos(albumId, count) {
-    return Array.from({ length: count }, (_, i) => {
-        const [seedBase, w, h] = aspectSeeds[i % aspectSeeds.length];
-        const seed = `${albumId}-${seedBase}-${i}`;
-        return {
-            photo_id: `${albumId}-ph${i + 1}`,
-            album_id: albumId,
-            filename: `photo${String(i + 1).padStart(2, "0")}.jpg`,
-            original_url: PLACEHOLDER_IMG(seed, w, h),
-            display_url: PLACEHOLDER_IMG(seed, Math.round(w * 0.75), Math.round(h * 0.75)),
-            thumbnail_url: PLACEHOLDER_IMG(seed, Math.round(w * 0.25), Math.round(h * 0.25)),
-            width: w,
-            height: h,
-            sort_order: i + 1,
-            visible: true,
-            created_at: "2026-04-13T10:00:00Z",
-        };
-    });
-}
-const photosByAlbum = {
-    a1: buildPhotos("a1", 8),
-    a2: buildPhotos("a2", 6),
-    a3: buildPhotos("a3", 5),
-};
+// No demo albums — the site ships empty by design. Add real albums (and
+// their photos) from /admin once the backend is connected; in the meantime,
+// creating a new album from /admin here in mock mode works too (see
+// mockDispatch's "createAlbum" case below).
+const albums = [];
+const photosByAlbum = {};
 const services = [
     { service_id: "s1", title: "تصوير زفاف", description: "تغطية اليوم بالكامل بأسلوب سردي احترافي.", visible: true, sort_order: 1 },
     { service_id: "s2", title: "تصوير بورتريه", description: "جلسات بورتريه في الاستوديو أو في الموقع.", visible: true, sort_order: 2 },
