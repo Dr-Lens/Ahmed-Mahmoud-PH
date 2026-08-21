@@ -15,9 +15,9 @@ export const CONFIG = {
         return this.API_BASE_URL.trim().length === 0;
     },
     BRAND: {
-        name: "AHMED MAHMOUD PH",
-        shortName: "AHMED PH",
-        title: "Photographer & Photo Editor",
+        name: "أحمد محمود PH", // matches the logo's brand name
+        shortName: "أحمد PH",
+        title: "مصور ومحرر صور",
         whatsapp: "+201111714320", // international format, used for wa.me links
     },
     /**

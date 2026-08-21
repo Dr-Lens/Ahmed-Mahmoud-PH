@@ -9,19 +9,19 @@ import { renderServicesSection } from "./sections/services.js";
 import { renderSocialSection } from "./sections/social.js";
 import { renderBeforeAfterSection } from "./sections/beforeAfter.js";
 const TABS = [
-    ["overview", "Overview"],
-    ["albums", "Albums"],
-    ["services", "Services"],
-    ["social", "Social"],
-    ["beforeAfter", "Before / After"],
-    ["settings", "Settings"],
+    ["overview", "نظرة عامة"],
+    ["albums", "الألبومات"],
+    ["services", "الخدمات"],
+    ["social", "التواصل الاجتماعي"],
+    ["beforeAfter", "قبل / بعد"],
+    ["settings", "الإعدادات"],
 ];
 export function renderAdminDashboard(outlet) {
     if (!isAuthenticated()) {
         navigate("/admin", true);
         return;
     }
-    setMeta({ title: "Admin — AHMED MAHMOUD PH", description: "Admin dashboard." });
+    setMeta({ title: "لوحة التحكم — أحمد محمود PH", description: "لوحة تحكم الإدارة." });
     const content = h("div", { class: "admin-content" });
     const tabButtons = new Map();
     const nav = h("nav", { class: "admin-nav" }, TABS.map(([id, label]) => {
@@ -30,7 +30,7 @@ export function renderAdminDashboard(outlet) {
         tabButtons.set(id, btn);
         return btn;
     }));
-    const logoutBtn = h("button", { class: "admin-logout" }, ["Log out"]);
+    const logoutBtn = h("button", { class: "admin-logout" }, ["تسجيل الخروج"]);
     logoutBtn.addEventListener("click", async () => {
         await logout();
         navigate("/admin", true);
@@ -49,8 +49,8 @@ export function renderAdminDashboard(outlet) {
     }
     const page = h("div", { class: "admin" }, [
         h("header", { class: "admin-header" }, [
-            h("span", { class: "admin-header__brand" }, ["AHMED MAHMOUD PH"]),
-            h("span", { class: "admin-header__tag" }, ["ADMIN"]),
+            h("span", { class: "admin-header__brand" }, ["أحمد محمود PH"]),
+            h("span", { class: "admin-header__tag" }, ["الإدارة"]),
             logoutBtn,
         ]),
         nav,

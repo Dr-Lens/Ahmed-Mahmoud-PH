@@ -16,7 +16,7 @@ let dragging = false;
 function getRoot() {
     if (root)
         return root;
-    root = h("div", { class: "viewer", role: "dialog", "aria-modal": "true", "aria-label": "Photo viewer" });
+    root = h("div", { class: "viewer", role: "dialog", "aria-modal": "true", "aria-label": "عارض الصور" });
     document.body.append(root);
     return root;
 }
@@ -70,11 +70,11 @@ function render() {
     });
     applyTransform(img);
     attachGestures(img);
-    const closeBtn = h("button", { class: "viewer__close", "aria-label": "Close viewer" }, ["\u00d7"]);
+    const closeBtn = h("button", { class: "viewer__close", "aria-label": "إغلاق العارض" }, ["\u00d7"]);
     closeBtn.addEventListener("click", closeViewer);
-    const prevBtn = h("button", { class: "viewer__nav viewer__nav--prev", "aria-label": "Previous photo", disabled: index === 0 }, ["\u2190"]);
+    const prevBtn = h("button", { class: "viewer__nav viewer__nav--prev", "aria-label": "الصورة السابقة", disabled: index === 0 }, ["\u2192"]);
     prevBtn.addEventListener("click", () => go(-1));
-    const nextBtn = h("button", { class: "viewer__nav viewer__nav--next", "aria-label": "Next photo", disabled: index === photos.length - 1 }, ["\u2192"]);
+    const nextBtn = h("button", { class: "viewer__nav viewer__nav--next", "aria-label": "الصورة التالية", disabled: index === photos.length - 1 }, ["\u2190"]);
     nextBtn.addEventListener("click", () => go(1));
     const counter = h("div", { class: "viewer__counter" }, [
         `${String(index + 1).padStart(2, "0")} / ${String(photos.length).padStart(2, "0")}`,

@@ -1,11 +1,13 @@
 {
-  "name": "AHMED MAHMOUD PH",
-  "short_name": "AHMED PH",
-  "description": "Editorial photography portfolio by Ahmed Mahmoud — Photographer & Photo Editor.",
+  "name": "أحمد محمود PH",
+  "short_name": "أحمد PH",
+  "description": "بورتفوليو تصوير فوتوغرافي احترافي لأحمد محمود — مصور ومحرر صور.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
+  "lang": "ar",
+  "dir": "rtl",
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [

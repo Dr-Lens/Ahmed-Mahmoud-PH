@@ -2,20 +2,20 @@ import { h } from "../../../utils/dom.js";
 import { getBeforeAfter, createBeforeAfter, deleteBeforeAfter } from "../../../api/settings.js";
 import { skeletonList, errorState, emptyState } from "../../../components/feedback.js";
 export async function renderBeforeAfterSection(root) {
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Before / After"]), skeletonList(2));
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["قبل / بعد"]), skeletonList(2));
     try {
         const projects = await getBeforeAfter();
         draw(root, projects);
     }
     catch {
-        root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Before / After"]), errorState("Couldn't load projects.", () => renderBeforeAfterSection(root)));
+        root.replaceChildren(h("h2", { class: "admin-section__title" }, ["قبل / بعد"]), errorState("تعذّر تحميل المشاريع.", () => renderBeforeAfterSection(root)));
     }
 }
 function draw(root, projects) {
-    const title = h("input", { class: "input", placeholder: "Project title" });
-    const before = h("input", { class: "input", placeholder: "Before image URL" });
-    const after = h("input", { class: "input", placeholder: "After image URL" });
-    const addBtn = h("button", { class: "btn btn--primary" }, ["+ Add project"]);
+    const title = h("input", { class: "input", placeholder: "عنوان المشروع" });
+    const before = h("input", { class: "input", placeholder: "رابط صورة قبل" });
+    const after = h("input", { class: "input", placeholder: "رابط صورة بعد" });
+    const addBtn = h("button", { class: "btn btn--primary" }, ["+ إضافة مشروع"]);
     addBtn.addEventListener("click", async () => {
         if (!title.value.trim() || !before.value.trim() || !after.value.trim())
             return;
@@ -31,13 +31,13 @@ function draw(root, projects) {
     });
     const list = projects.length
         ? h("div", { class: "admin-album-list" }, projects.map((p) => row(root, p)))
-        : emptyState("No before/after projects yet.");
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Before / After"]), h("div", { class: "admin-form" }, [title, before, after, addBtn]), list);
+        : emptyState("لا توجد مشاريع قبل/بعد بعد.");
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["قبل / بعد"]), h("div", { class: "admin-form" }, [title, before, after, addBtn]), list);
 }
 function row(root, project) {
-    const deleteBtn = h("button", { class: "btn btn--ghost btn--small btn--danger" }, ["Delete"]);
+    const deleteBtn = h("button", { class: "btn btn--ghost btn--small btn--danger" }, ["حذف"]);
     deleteBtn.addEventListener("click", async () => {
-        if (!confirm(`Delete "${project.title}"?`))
+        if (!confirm(`حذف "${project.title}"؟`))
             return;
         await deleteBeforeAfter(project.project_id);
         renderBeforeAfterSection(root);

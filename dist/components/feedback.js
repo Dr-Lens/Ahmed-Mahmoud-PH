@@ -8,10 +8,10 @@ export function brandedLoader() {
         h("span", { class: "brand-loader__bar" }),
     ]);
 }
-export function errorState(message = "Something went wrong. Please try again.", onRetry) {
+export function errorState(message = "حدث خطأ ما. من فضلك حاول مرة أخرى.", onRetry) {
     const children = [h("p", { class: "state__message" }, [message])];
     if (onRetry) {
-        const btn = h("button", { class: "btn btn--ghost" }, ["Try again"]);
+        const btn = h("button", { class: "btn btn--ghost" }, ["حاول مرة أخرى"]);
         btn.addEventListener("click", onRetry);
         children.push(btn);
     }

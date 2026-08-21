@@ -12,8 +12,8 @@ export async function renderAlbum(outlet, slug) {
     try {
         const album = await getAlbumBySlug(slug);
         setMeta({
-            title: `${album.title} — AHMED MAHMOUD PH`,
-            description: album.description || `${album.category} photography in ${album.location}.`,
+            title: `${album.title} — أحمد محمود PH`,
+            description: album.description || `تصوير ${album.category} في ${album.location}.`,
             image: album.cover_url,
             type: "article",
         });
@@ -24,10 +24,10 @@ export async function renderAlbum(outlet, slug) {
             description: album.description,
             about: album.category,
         });
-        const backBtn = h("a", { href: "/work", "data-link": "true", class: "back-link" }, ["\u2190 BACK"]);
+        const backBtn = h("a", { href: "/work", "data-link": "true", class: "back-link" }, ["\u2192 رجوع"]);
         const header = h("header", { class: "album-header" }, [
             backBtn,
-            h("p", { class: "album-header__category" }, [album.category.toUpperCase()]),
+            h("p", { class: "album-header__category" }, [album.category]),
             h("h1", { class: "album-header__title" }, [album.title]),
             h("p", { class: "album-header__meta" }, [`${album.location} \u2014 ${formatDate(album.date, { yearOnly: true })}`]),
             album.description ? h("p", { class: "album-header__desc" }, [album.description]) : h("span", {}),
@@ -36,17 +36,17 @@ export async function renderAlbum(outlet, slug) {
         page.replaceChildren(header, gallerySlot);
         try {
             const photos = await getPhotos(album.album_id);
-            gallerySlot.replaceChildren(photos.length ? renderGallery(photos) : errorState("No photos in this story yet."));
+            gallerySlot.replaceChildren(photos.length ? renderGallery(photos) : errorState("لا توجد صور في هذه القصة بعد."));
         }
         catch {
-            gallerySlot.replaceChildren(errorState("Couldn't load photos.", () => renderAlbum(outlet, slug)));
+            gallerySlot.replaceChildren(errorState("تعذّر تحميل الصور.", () => renderAlbum(outlet, slug)));
         }
     }
     catch {
         page.replaceChildren(h("div", { class: "state state--error" }, [
-            h("p", { class: "state__message" }, ["This story couldn't be found."]),
+            h("p", { class: "state__message" }, ["تعذّر العثور على هذه القصة."]),
             (() => {
-                const btn = h("button", { class: "btn btn--ghost" }, ["Back to Work"]);
+                const btn = h("button", { class: "btn btn--ghost" }, ["العودة إلى الأعمال"]);
                 btn.addEventListener("click", () => navigate("/work"));
                 return btn;
             })(),

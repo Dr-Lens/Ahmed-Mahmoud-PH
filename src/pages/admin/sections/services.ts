@@ -4,12 +4,12 @@ import { skeletonList, errorState } from "../../../components/feedback.js";
 import type { Service } from "../../../types/index.js";
 
 export async function renderServicesSection(root: HTMLElement): Promise<void> {
-  root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Services"]), skeletonList(3));
+  root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الخدمات"]), skeletonList(3));
   try {
     const services = await getServices();
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Services"]), h("div", { class: "admin-service-list" }, services.map(row)));
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الخدمات"]), h("div", { class: "admin-service-list" }, services.map(row)));
   } catch {
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Services"]), errorState("Couldn't load services.", () => renderServicesSection(root)));
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الخدمات"]), errorState("تعذّر تحميل الخدمات.", () => renderServicesSection(root)));
   }
 }
 
@@ -17,24 +17,24 @@ function row(service: Service): HTMLElement {
   const title = h("input", { class: "input", value: service.title }) as HTMLInputElement;
   const desc = h("input", { class: "input", value: service.description }) as HTMLInputElement;
   const visible = h("input", { type: "checkbox", checked: service.visible }) as HTMLInputElement;
-  const saveBtn = h("button", { class: "btn btn--ghost btn--small" }, ["Save"]);
+  const saveBtn = h("button", { class: "btn btn--ghost btn--small" }, ["حفظ"]);
 
   saveBtn.addEventListener("click", async () => {
-    saveBtn.textContent = "Saving\u2026";
+    saveBtn.textContent = "جارٍ الحفظ\u2026";
     try {
       await updateService(service.service_id, { title: title.value, description: desc.value, visible: visible.checked });
-      saveBtn.textContent = "Saved";
+      saveBtn.textContent = "تم الحفظ";
     } catch {
-      saveBtn.textContent = "Failed";
+      saveBtn.textContent = "فشل الحفظ";
     } finally {
-      setTimeout(() => (saveBtn.textContent = "Save"), 1500);
+      setTimeout(() => (saveBtn.textContent = "حفظ"), 1500);
     }
   });
 
   return h("div", { class: "admin-service-row" }, [
     title,
     desc,
-    h("label", { class: "checkbox-label" }, [visible, " Visible"]),
+    h("label", { class: "checkbox-label" }, [visible, " مرئي"]),
     saveBtn,
   ]);
 }

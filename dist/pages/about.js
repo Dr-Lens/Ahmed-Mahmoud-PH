@@ -7,13 +7,13 @@ import { CONFIG } from "../config.js";
 const PLATFORM_LABEL = {
     instagram: "Instagram",
     facebook: "Facebook",
-    whatsapp: "WhatsApp",
-    email: "Email",
+    whatsapp: "واتساب",
+    email: "البريد الإلكتروني",
 };
 export async function renderAbout(outlet) {
     setMeta({
-        title: "About — AHMED MAHMOUD PH",
-        description: `About ${CONFIG.BRAND.name}, ${CONFIG.BRAND.title.toLowerCase()}.`,
+        title: "نبذة عني — أحمد محمود PH",
+        description: `نبذة عن ${CONFIG.BRAND.name}، ${CONFIG.BRAND.title}.`,
     });
     const page = h("div", { class: "page page--about" }, [skeletonList(1)]);
     mount(outlet, page);
@@ -22,16 +22,16 @@ export async function renderAbout(outlet) {
         const links = social
             .filter((s) => s.visible && s.url)
             .map((s) => h("a", { href: s.url, class: "social-link", target: "_blank", rel: "noopener" }, [PLATFORM_LABEL[s.platform] ?? s.platform]));
-        page.replaceChildren(h("h1", { class: "page__title" }, ["ABOUT"]), h("div", { class: "about" }, [
+        page.replaceChildren(h("h1", { class: "page__title" }, ["نبذة عني"]), h("div", { class: "about" }, [
             h("img", { class: "about__portrait", src: settings.hero_image, alt: settings.photographer_name }),
-            h("h2", { class: "about__name" }, [settings.photographer_name.toUpperCase()]),
-            h("p", { class: "about__role" }, ["PHOTOGRAPHER", h("br"), "& PHOTO EDITOR"]),
+            h("h2", { class: "about__name" }, [settings.photographer_name]),
+            h("p", { class: "about__role" }, ["مصور", h("br"), "ومحرر صور"]),
             h("p", { class: "about__bio" }, [settings.bio]),
             h("p", { class: "about__location" }, [settings.location]),
             links.length ? h("div", { class: "about__social" }, links) : h("span", {}),
         ]));
     }
     catch {
-        page.replaceChildren(errorState("Couldn't load this page.", () => renderAbout(outlet)));
+        page.replaceChildren(errorState("تعذّر تحميل هذه الصفحة.", () => renderAbout(outlet)));
     }
 }

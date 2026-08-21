@@ -38,7 +38,7 @@ function main() {
         outlet.innerHTML = "";
         const el = document.createElement("div");
         el.className = "page state state--error";
-        el.innerHTML = `<p class="state__message">Page not found.</p><a href="/" data-link class="btn btn--ghost">Back home</a>`;
+        el.innerHTML = `<p class="state__message">الصفحة غير موجودة.</p><a href="/" data-link class="btn btn--ghost">العودة للرئيسية</a>`;
         outlet.append(el);
     });
     startRouter();

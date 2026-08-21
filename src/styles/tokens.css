@@ -8,9 +8,11 @@
   --color-line: #e2e2e2;
   --color-danger: #b3261e;
 
-  /* Type: Fraunces for editorial display, Inter for body/UI. */
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Type: Markazi Text for editorial display, Cairo for body/UI — both have
+     full, well-hinted Arabic character sets while keeping an editorial,
+     premium feel rather than a generic system-UI look. */
+  --font-display: "Markazi Text", "Traditional Arabic", Georgia, serif;
+  --font-body: "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   --step-caption: 0.6875rem;
   --step-body: 0.9375rem;

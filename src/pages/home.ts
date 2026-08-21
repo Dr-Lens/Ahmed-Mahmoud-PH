@@ -9,23 +9,23 @@ import type { Album } from "../types/index.js";
 
 export async function renderHome(outlet: HTMLElement): Promise<void> {
   setMeta({
-    title: "AHMED MAHMOUD PH — Photographer & Photo Editor",
-    description: "Editorial wedding, portrait, fashion and commercial photography by Ahmed Mahmoud.",
+    title: "أحمد محمود PH — مصور ومحرر صور",
+    description: "تصوير فوتوغرافي احترافي لحفلات الزفاف والبورتريه والأزياء والتصوير التجاري مع أحمد محمود.",
   });
 
   const hero = h("section", { class: "hero" }, [
     h("div", { class: "hero__image-wrap" }, [
-      h("img", { class: "hero__image", alt: "Ahmed Mahmoud — featured photograph" }),
+      h("img", { class: "hero__image", alt: "أحمد محمود — صورة مميزة" }),
     ]),
     h("div", { class: "hero__content" }, [
-      h("h1", { class: "hero__title" }, ["AHMED MAHMOUD", h("span", {}, [" PH"])]),
-      h("p", { class: "hero__subtitle" }, ["PHOTOGRAPHER & PHOTO EDITOR"]),
-      h("a", { href: "#selected-work", class: "hero__cta" }, ["EXPLORE WORK", h("span", { class: "hero__cta-arrow" }, [" \u2193"])]),
+      h("h1", { class: "hero__title" }, ["أحمد محمود", h("span", {}, [" PH"])]),
+      h("p", { class: "hero__subtitle" }, ["مصور ومحرر صور"]),
+      h("a", { href: "#selected-work", class: "hero__cta" }, ["استكشف الأعمال", h("span", { class: "hero__cta-arrow" }, [" \u2193"])]),
     ]),
   ]);
 
   const workSection = h("section", { class: "section", id: "selected-work" }, [
-    h("h2", { class: "section__title" }, ["SELECTED WORK"]),
+    h("h2", { class: "section__title" }, ["أعمال مختارة"]),
     skeletonList(3),
   ]);
 
@@ -36,7 +36,7 @@ export async function renderHome(outlet: HTMLElement): Promise<void> {
     const settings = await getSettings();
     const img = hero.querySelector("img")!;
     img.src = settings.hero_image;
-    img.alt = `${settings.photographer_name} — featured photograph`;
+    img.alt = `${settings.photographer_name} — صورة مميزة`;
   } catch {
     // Hero image failing to load shouldn't block the rest of the page.
   }
@@ -45,12 +45,12 @@ export async function renderHome(outlet: HTMLElement): Promise<void> {
     const albums = await getFeaturedAlbums();
     const list = albums.length
       ? h("div", { class: "album-list" }, albums.map(albumCard))
-      : h("p", { class: "state__message" }, ["No albums available yet."]);
-    workSection.replaceChildren(h("h2", { class: "section__title" }, ["SELECTED WORK"]), list);
+      : h("p", { class: "state__message" }, ["لا توجد أعمال متاحة بعد."]);
+    workSection.replaceChildren(h("h2", { class: "section__title" }, ["أعمال مختارة"]), list);
   } catch {
     workSection.replaceChildren(
-      h("h2", { class: "section__title" }, ["SELECTED WORK"]),
-      errorState("Couldn't load selected work.", () => renderHome(outlet))
+      h("h2", { class: "section__title" }, ["أعمال مختارة"]),
+      errorState("تعذّر تحميل الأعمال المختارة.", () => renderHome(outlet))
     );
   }
 }
@@ -61,10 +61,10 @@ function albumCard(album: Album): HTMLElement {
   const card = h("a", { href: `/${album.slug}`, "data-link": "true", class: "album-card" }, [
     h("div", { class: "album-card__image-wrap" }, [img]),
     h("div", { class: "album-card__meta" }, [
-      h("span", { class: "album-card__category" }, [album.category.toUpperCase()]),
+      h("span", { class: "album-card__category" }, [album.category]),
       h("h3", { class: "album-card__title" }, [album.title]),
       h("p", { class: "album-card__sub" }, [`${album.location} \u2014 ${formatDate(album.date, { yearOnly: true })}`]),
-      h("span", { class: "album-card__link" }, ["VIEW STORY \u2192"]),
+      h("span", { class: "album-card__link" }, ["عرض القصة \u2190"]),
     ]),
   ]);
   return card;

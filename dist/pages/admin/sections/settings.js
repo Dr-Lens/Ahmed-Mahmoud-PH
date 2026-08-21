@@ -2,29 +2,29 @@ import { h } from "../../../utils/dom.js";
 import { getSettings, updateSettings } from "../../../api/settings.js";
 import { skeletonList, errorState } from "../../../components/feedback.js";
 export async function renderSettingsSection(root) {
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Settings"]), skeletonList(1));
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الإعدادات"]), skeletonList(1));
     try {
         const settings = await getSettings();
         draw(root, settings);
     }
     catch {
-        root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Settings"]), errorState("Couldn't load settings.", () => renderSettingsSection(root)));
+        root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الإعدادات"]), errorState("تعذّر تحميل الإعدادات.", () => renderSettingsSection(root)));
     }
 }
 const FIELDS = [
-    ["site_name", "Site name"],
-    ["photographer_name", "Photographer name"],
-    ["bio", "Biography", "textarea"],
-    ["hero_image", "Hero image URL"],
-    ["location", "Location"],
-    ["email", "Email"],
-    ["whatsapp", "WhatsApp (international format)"],
-    ["instagram", "Instagram URL"],
-    ["facebook", "Facebook URL"],
+    ["site_name", "اسم الموقع"],
+    ["photographer_name", "اسم المصور"],
+    ["bio", "نبذة تعريفية", "textarea"],
+    ["hero_image", "رابط صورة الغلاف الرئيسية"],
+    ["location", "الموقع"],
+    ["email", "البريد الإلكتروني"],
+    ["whatsapp", "واتساب (بالصيغة الدولية)"],
+    ["instagram", "رابط إنستغرام"],
+    ["facebook", "رابط فيسبوك"],
 ];
 function draw(root, settings) {
     const inputs = new Map();
-    const saveBtn = h("button", { class: "btn btn--primary" }, ["Save settings"]);
+    const saveBtn = h("button", { class: "btn btn--primary" }, ["حفظ الإعدادات"]);
     const savedMsg = h("p", { class: "admin-form__saved" });
     const form = h("form", { class: "admin-form" }, [
         ...FIELDS.map(([key, label, type]) => {
@@ -45,18 +45,18 @@ function draw(root, settings) {
             patch[key] = el.value.trim();
         });
         saveBtn.setAttribute("disabled", "true");
-        saveBtn.textContent = "Saving\u2026";
+        saveBtn.textContent = "جارٍ الحفظ\u2026";
         try {
             await updateSettings(patch);
-            savedMsg.textContent = "Saved.";
+            savedMsg.textContent = "تم الحفظ.";
         }
         catch {
-            savedMsg.textContent = "Couldn't save. Please try again.";
+            savedMsg.textContent = "تعذّر الحفظ. من فضلك حاول مرة أخرى.";
         }
         finally {
             saveBtn.removeAttribute("disabled");
-            saveBtn.textContent = "Save settings";
+            saveBtn.textContent = "حفظ الإعدادات";
         }
     });
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Settings"]), form);
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الإعدادات"]), form);
 }

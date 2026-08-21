@@ -28,7 +28,7 @@
 .viewer__close {
   position: absolute;
   top: var(--space-4);
-  right: var(--space-4);
+  inset-inline-end: var(--space-4);
   z-index: 2;
   color: var(--color-white);
   font-size: 1.75rem;
@@ -46,8 +46,8 @@
   opacity: 0.85;
 }
 .viewer__nav:disabled { opacity: 0.25; pointer-events: none; }
-.viewer__nav--prev { left: var(--space-2); }
-.viewer__nav--next { right: var(--space-2); }
+.viewer__nav--prev { inset-inline-start: var(--space-2); }
+.viewer__nav--next { inset-inline-end: var(--space-2); }
 
 .viewer__counter {
   position: absolute;

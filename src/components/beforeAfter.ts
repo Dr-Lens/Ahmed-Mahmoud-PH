@@ -3,21 +3,21 @@ import type { BeforeAfter } from "../types/index.js";
 
 export function renderBeforeAfter(project: BeforeAfter): HTMLElement {
   const afterWrap = h("div", { class: "ba__after" }, [
-    h("img", { src: project.after_url, alt: `${project.title} — after`, class: "ba__img" }),
+    h("img", { src: project.after_url, alt: `${project.title} — بعد`, class: "ba__img" }),
   ]);
   const beforeWrap = h("div", { class: "ba__before" }, [
-    h("img", { src: project.before_url, alt: `${project.title} — before`, class: "ba__img" }),
+    h("img", { src: project.before_url, alt: `${project.title} — قبل`, class: "ba__img" }),
   ]);
-  const handle = h("div", { class: "ba__handle", role: "slider", "aria-label": "Comparison position", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": "50", tabindex: "0" }, [
+  const handle = h("div", { class: "ba__handle", role: "slider", "aria-label": "موضع المقارنة", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": "50", tabindex: "0" }, [
     h("span", { class: "ba__handle-line" }),
     h("span", { class: "ba__handle-grip" }, ["\u2194"]),
   ]);
-  const labels = h("div", { class: "ba__labels" }, [
-    h("span", { class: "ba__label" }, ["BEFORE"]),
-    h("span", { class: "ba__label" }, ["AFTER"]),
+  const labels = h("div", { class: "ba__labels", dir: "ltr" }, [
+    h("span", { class: "ba__label" }, ["قبل"]),
+    h("span", { class: "ba__label" }, ["بعد"]),
   ]);
 
-  const frame = h("div", { class: "ba__frame" }, [afterWrap, beforeWrap, handle]);
+  const frame = h("div", { class: "ba__frame", dir: "ltr" }, [afterWrap, beforeWrap, handle]);
   const wrapper = h("div", { class: "ba" }, [
     h("h3", { class: "ba__title" }, [project.title]),
     frame,

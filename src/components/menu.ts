@@ -2,11 +2,11 @@ import { h, trapFocus } from "../utils/dom.js";
 import { navigate } from "../services/router.js";
 
 const LINKS: [string, string][] = [
-  ["Home", "/"],
-  ["Work", "/work"],
-  ["About", "/about"],
-  ["Services", "/services"],
-  ["Contact", "/contact"],
+  ["الرئيسية", "/"],
+  ["الأعمال", "/work"],
+  ["نبذة عني", "/about"],
+  ["الخدمات", "/services"],
+  ["تواصل", "/contact"],
 ];
 
 let releaseFocus: (() => void) | null = null;
@@ -18,7 +18,7 @@ export function initMenu(): void {
 
   const nav = h(
     "nav",
-    { class: "menu-links", "aria-label": "Primary" },
+    { class: "menu-links", "aria-label": "التنقل الرئيسي" },
     LINKS.map(([label, href], i) =>
       h("a", { href, "data-link": "true", class: "menu-link", style: `--i:${i}` }, [
         h("span", { class: "menu-link__index" }, [String(i + 1).padStart(2, "0")]),

@@ -15,10 +15,10 @@ export function brandedLoader(): HTMLElement {
   ]);
 }
 
-export function errorState(message = "Something went wrong. Please try again.", onRetry?: () => void): HTMLElement {
+export function errorState(message = "حدث خطأ ما. من فضلك حاول مرة أخرى.", onRetry?: () => void): HTMLElement {
   const children: (Node | string)[] = [h("p", { class: "state__message" }, [message])];
   if (onRetry) {
-    const btn = h("button", { class: "btn btn--ghost" }, ["Try again"]);
+    const btn = h("button", { class: "btn btn--ghost" }, ["حاول مرة أخرى"]);
     btn.addEventListener("click", onRetry);
     children.push(btn);
   }

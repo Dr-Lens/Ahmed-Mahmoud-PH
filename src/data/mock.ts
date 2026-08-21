@@ -26,12 +26,12 @@ const PLACEHOLDER_IMG = (seed: string, w = 1200, h = 1500) =>
   `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
 
 const settings: SiteSettings = {
-  site_name: "AHMED MAHMOUD PH",
-  photographer_name: "Ahmed Mahmoud",
+  site_name: "أحمد محمود PH",
+  photographer_name: "أحمد محمود",
   logo_url: "/public/assets/logo.webp",
-  bio: "Add a short biography from the Admin Dashboard — experience, specializations, and story go here.",
+  bio: "أضف نبذة قصيرة من لوحة التحكم — الخبرة والتخصصات والقصة الشخصية تُكتب هنا.",
   hero_image: PLACEHOLDER_IMG("hero", 1200, 1600),
-  location: "Cairo, Egypt",
+  location: "القاهرة، مصر",
   email: "",
   whatsapp: "+201111714320",
   instagram: "",
@@ -40,20 +40,20 @@ const settings: SiteSettings = {
 };
 
 const categories: Category[] = [
-  { category_id: "c1", name: "Wedding", slug: "wedding", description: "", visible: true, sort_order: 1 },
-  { category_id: "c2", name: "Portrait", slug: "portrait", description: "", visible: true, sort_order: 2 },
-  { category_id: "c3", name: "Event", slug: "event", description: "", visible: true, sort_order: 3 },
-  { category_id: "c4", name: "Fashion", slug: "fashion", description: "", visible: true, sort_order: 4 },
+  { category_id: "c1", name: "زفاف", slug: "wedding", description: "", visible: true, sort_order: 1 },
+  { category_id: "c2", name: "بورتريه", slug: "portrait", description: "", visible: true, sort_order: 2 },
+  { category_id: "c3", name: "مناسبات", slug: "event", description: "", visible: true, sort_order: 3 },
+  { category_id: "c4", name: "أزياء", slug: "fashion", description: "", visible: true, sort_order: 4 },
 ];
 
 const albums: Album[] = [
   {
     album_id: "a1",
-    title: "Ahmed & Sara",
+    title: "أحمد وسارة",
     slug: "wedding-ahmed-sara",
-    category: "Wedding",
-    description: "A placeholder wedding story. Replace with a real album and photos from /admin.",
-    location: "Cairo",
+    category: "زفاف",
+    description: "قصة زفاف تجريبية. استبدلها بألبوم وصور حقيقية من لوحة التحكم.",
+    location: "القاهرة",
     date: "2026-04-12",
     cover_url: PLACEHOLDER_IMG("wedding-cover", 1200, 1500),
     featured: true,
@@ -65,11 +65,11 @@ const albums: Album[] = [
   },
   {
     album_id: "a2",
-    title: "Studio Portraits",
+    title: "جلسة بورتريه استوديو",
     slug: "studio-portraits",
-    category: "Portrait",
-    description: "Placeholder portrait session.",
-    location: "Cairo Studio",
+    category: "بورتريه",
+    description: "جلسة بورتريه تجريبية.",
+    location: "استوديو القاهرة",
     date: "2026-03-02",
     cover_url: PLACEHOLDER_IMG("portrait-cover", 1200, 1500),
     featured: true,
@@ -81,11 +81,11 @@ const albums: Album[] = [
   },
   {
     album_id: "a3",
-    title: "Nour Fashion Editorial",
+    title: "تحرير أزياء نور",
     slug: "nour-fashion-editorial",
-    category: "Fashion",
-    description: "Placeholder fashion editorial.",
-    location: "Downtown Cairo",
+    category: "أزياء",
+    description: "تحرير أزياء تجريبي.",
+    location: "وسط القاهرة",
     date: "2026-01-20",
     cover_url: PLACEHOLDER_IMG("fashion-cover", 1500, 1200),
     featured: false,
@@ -135,11 +135,11 @@ const photosByAlbum: Record<string, Photo[]> = {
 };
 
 const services: Service[] = [
-  { service_id: "s1", title: "Wedding Photography", description: "Full-day coverage, editorial storytelling.", visible: true, sort_order: 1 },
-  { service_id: "s2", title: "Portrait Photography", description: "Studio and on-location portrait sessions.", visible: true, sort_order: 2 },
-  { service_id: "s3", title: "Event Photography", description: "Corporate and private event coverage.", visible: true, sort_order: 3 },
-  { service_id: "s4", title: "Fashion Photography", description: "Editorial and lookbook shoots.", visible: true, sort_order: 4 },
-  { service_id: "s5", title: "Commercial Photography", description: "Product and brand campaigns.", visible: true, sort_order: 5 },
+  { service_id: "s1", title: "تصوير زفاف", description: "تغطية اليوم بالكامل بأسلوب سردي احترافي.", visible: true, sort_order: 1 },
+  { service_id: "s2", title: "تصوير بورتريه", description: "جلسات بورتريه في الاستوديو أو في الموقع.", visible: true, sort_order: 2 },
+  { service_id: "s3", title: "تصوير مناسبات", description: "تغطية المناسبات الخاصة والفعاليات الرسمية.", visible: true, sort_order: 3 },
+  { service_id: "s4", title: "تصوير أزياء", description: "جلسات أزياء وتحرير تحريري احترافي.", visible: true, sort_order: 4 },
+  { service_id: "s5", title: "تصوير تجاري", description: "حملات المنتجات والعلامات التجارية.", visible: true, sort_order: 5 },
 ];
 
 const social: SocialLink[] = [
@@ -152,10 +152,10 @@ const social: SocialLink[] = [
 const beforeAfter: BeforeAfter[] = [
   {
     project_id: "ba1",
-    title: "Portrait Retouch",
+    title: "تعديل بورتريه",
     before_url: PLACEHOLDER_IMG("before1", 1200, 1500),
     after_url: PLACEHOLDER_IMG("after1", 1200, 1500),
-    description: "Placeholder before/after project.",
+    description: "مشروع قبل/بعد تجريبي.",
     visible: true,
     sort_order: 1,
     created_at: "2026-02-01T10:00:00Z",
@@ -201,7 +201,7 @@ export async function mockDispatch<T>(action: string, payload?: Record<string, u
       return albums.filter((a) => a.visible && a.featured && a.status === "PUBLIC") as unknown as T;
     case "getAlbum": {
       const found = albums.find((a) => a.slug === payload?.slug);
-      if (!found) throw Object.assign(new Error("Album not found"), { code: "NOT_FOUND" });
+      if (!found) throw Object.assign(new Error("الألبوم غير موجود"), { code: "NOT_FOUND" });
       return found as unknown as T;
     }
     case "getPhotos":
@@ -230,7 +230,7 @@ export async function mockDispatch<T>(action: string, payload?: Record<string, u
     case "updateAlbum": {
       const id = String(payload?.album_id);
       const album = albums.find((a) => a.album_id === id);
-      if (!album) throw Object.assign(new Error("Album not found"), { code: "NOT_FOUND" });
+      if (!album) throw Object.assign(new Error("الألبوم غير موجود"), { code: "NOT_FOUND" });
       Object.assign(album, payload?.patch);
       return album as unknown as T;
     }
@@ -246,7 +246,7 @@ export async function mockDispatch<T>(action: string, payload?: Record<string, u
     case "updateService": {
       const id = String(payload?.service_id);
       const service = services.find((s) => s.service_id === id);
-      if (!service) throw Object.assign(new Error("Service not found"), { code: "NOT_FOUND" });
+      if (!service) throw Object.assign(new Error("الخدمة غير موجودة"), { code: "NOT_FOUND" });
       Object.assign(service, payload?.patch);
       return service as unknown as T;
     }
@@ -279,7 +279,7 @@ export async function mockDispatch<T>(action: string, payload?: Record<string, u
     case "login": {
       const { username, password } = payload as { username: string; password: string };
       const match = mockAdmins.find((a) => a.username === username && a.password === password);
-      if (!match) throw Object.assign(new Error("Invalid username or password."), { code: "INVALID_CREDENTIALS" });
+      if (!match) throw Object.assign(new Error("اسم المستخدم أو كلمة المرور غير صحيحة."), { code: "INVALID_CREDENTIALS" });
       const session: Session = {
         token: "mock-" + Math.random().toString(36).slice(2),
         expires_at: Date.now() + 1000 * 60 * 60 * 4,

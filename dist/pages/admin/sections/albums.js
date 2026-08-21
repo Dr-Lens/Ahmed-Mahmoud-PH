@@ -3,52 +3,57 @@ import { getAdminAlbums, createAlbum, updateAlbum, deleteAlbum, } from "../../..
 import { getPhotos, uploadPhoto, deletePhoto, validateFile } from "../../../api/photos.js";
 import { slugify } from "../../../utils/format.js";
 import { skeletonList, errorState, emptyState } from "../../../components/feedback.js";
+const STATUS_LABEL = {
+    DRAFT: "مسودة",
+    PUBLIC: "منشور",
+    PRIVATE: "خاص",
+};
 export async function renderAlbumsSection(root) {
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Albums"]), skeletonList(3));
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الألبومات"]), skeletonList(3));
     try {
         const albums = await getAdminAlbums();
         draw(root, albums);
     }
     catch {
-        root.replaceChildren(h("h2", { class: "admin-section__title" }, ["Albums"]), errorState("Couldn't load albums.", () => renderAlbumsSection(root)));
+        root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الألبومات"]), errorState("تعذّر تحميل الألبومات.", () => renderAlbumsSection(root)));
     }
 }
 function draw(root, albums) {
-    const newBtn = h("button", { class: "btn btn--primary" }, ["+ New album"]);
+    const newBtn = h("button", { class: "btn btn--primary" }, ["+ ألبوم جديد"]);
     newBtn.addEventListener("click", () => openEditor(root, null));
     const list = albums.length
         ? h("div", { class: "admin-album-list" }, albums.map((a) => albumRow(root, a)))
-        : emptyState("No albums created.", newBtnEmpty(root));
-    root.replaceChildren(h("div", { class: "admin-section__header" }, [h("h2", { class: "admin-section__title" }, ["Albums"]), newBtn]), list);
+        : emptyState("لا يوجد ألبومات بعد.", newBtnEmpty(root));
+    root.replaceChildren(h("div", { class: "admin-section__header" }, [h("h2", { class: "admin-section__title" }, ["الألبومات"]), newBtn]), list);
 }
 function newBtnEmpty(root) {
-    const btn = h("button", { class: "btn btn--primary" }, ["+ Create your first album"]);
+    const btn = h("button", { class: "btn btn--primary" }, ["+ أنشئ أول ألبوم لك"]);
     btn.addEventListener("click", () => openEditor(root, null));
     return btn;
 }
 function albumRow(root, album) {
-    const editBtn = h("button", { class: "btn btn--ghost btn--small" }, ["Edit"]);
+    const editBtn = h("button", { class: "btn btn--ghost btn--small" }, ["تعديل"]);
     editBtn.addEventListener("click", () => openEditor(root, album));
-    const photosBtn = h("button", { class: "btn btn--ghost btn--small" }, ["Photos"]);
+    const photosBtn = h("button", { class: "btn btn--ghost btn--small" }, ["الصور"]);
     photosBtn.addEventListener("click", () => openPhotoManager(root, album));
     const featureBtn = h("button", { class: `btn btn--chip${album.featured ? " is-active" : ""}` }, [
-        album.featured ? "Featured" : "Feature",
+        album.featured ? "مميز" : "تمييز",
     ]);
     featureBtn.addEventListener("click", async () => {
         const updated = await updateAlbum(album.album_id, { featured: !album.featured });
         Object.assign(album, updated);
         draw(root, await getAdminAlbums());
     });
-    const statusBtn = h("button", { class: "btn btn--chip" }, [album.status]);
+    const statusBtn = h("button", { class: "btn btn--chip" }, [STATUS_LABEL[album.status]]);
     statusBtn.addEventListener("click", async () => {
         const next = album.status === "PUBLIC" ? "DRAFT" : "PUBLIC";
         const updated = await updateAlbum(album.album_id, { status: next, visible: next === "PUBLIC" });
         Object.assign(album, updated);
         draw(root, await getAdminAlbums());
     });
-    const deleteBtn = h("button", { class: "btn btn--ghost btn--small btn--danger" }, ["Delete"]);
+    const deleteBtn = h("button", { class: "btn btn--ghost btn--small btn--danger" }, ["حذف"]);
     deleteBtn.addEventListener("click", async () => {
-        if (!confirm(`Delete "${album.title}"? This cannot be undone.`))
+        if (!confirm(`حذف "${album.title}"؟ لا يمكن التراجع عن هذا الإجراء.`))
             return;
         await deleteAlbum(album.album_id);
         draw(root, await getAdminAlbums());
@@ -57,7 +62,7 @@ function albumRow(root, album) {
         h("img", { class: "admin-album-row__cover", src: album.cover_url, alt: "" }),
         h("div", { class: "admin-album-row__body" }, [
             h("strong", {}, [album.title]),
-            h("span", { class: "admin-album-row__meta" }, [`${album.category} \u00b7 ${album.photo_count ?? 0} photos`]),
+            h("span", { class: "admin-album-row__meta" }, [`${album.category} \u00b7 ${album.photo_count ?? 0} صورة`]),
             h("div", { class: "admin-album-row__actions" }, [statusBtn, featureBtn, photosBtn, editBtn, deleteBtn]),
         ]),
     ]);
@@ -79,17 +84,17 @@ function openEditor(root, album) {
     });
     slug.addEventListener("input", () => (slugTouched = true));
     const error = h("p", { class: "admin-login__error", role: "alert" });
-    const saveBtn = h("button", { class: "btn btn--primary" }, [isNew ? "Create album" : "Save changes"]);
-    const cancelBtn = h("button", { class: "btn btn--ghost" }, ["Cancel"]);
+    const saveBtn = h("button", { class: "btn btn--primary" }, [isNew ? "إنشاء الألبوم" : "حفظ التغييرات"]);
+    const cancelBtn = h("button", { class: "btn btn--ghost" }, ["إلغاء"]);
     const form = h("form", { class: "admin-form" }, [
-        field("Title", title),
-        field("Slug", slug),
-        field("Category", category),
-        field("Location", location),
-        field("Date", date),
-        field("Cover image URL", cover),
-        field("Description", description),
-        field("Sort order", sortOrder),
+        field("العنوان", title),
+        field("الرابط المختصر (Slug)", slug),
+        field("الفئة", category),
+        field("الموقع", location),
+        field("التاريخ", date),
+        field("رابط صورة الغلاف", cover),
+        field("الوصف", description),
+        field("ترتيب العرض", sortOrder),
         error,
         h("div", { class: "admin-form__actions" }, [saveBtn, cancelBtn]),
     ]);
@@ -97,7 +102,7 @@ function openEditor(root, album) {
         e.preventDefault();
         error.textContent = "";
         if (!title.value.trim() || !slug.value.trim()) {
-            error.textContent = "Title and slug are required.";
+            error.textContent = "العنوان والرابط المختصر مطلوبان.";
             return;
         }
         const payload = {
@@ -121,17 +126,17 @@ function openEditor(root, album) {
             draw(root, await getAdminAlbums());
         }
         catch (err) {
-            error.textContent = err instanceof Error ? err.message : "Couldn't save this album.";
+            error.textContent = err instanceof Error ? err.message : "تعذّر حفظ هذا الألبوم.";
         }
     });
     cancelBtn.addEventListener("click", async () => draw(root, await getAdminAlbums()));
-    root.replaceChildren(h("div", { class: "admin-section__header" }, [h("h2", { class: "admin-section__title" }, [isNew ? "New album" : "Edit album"])]), form);
+    root.replaceChildren(h("div", { class: "admin-section__header" }, [h("h2", { class: "admin-section__title" }, [isNew ? "ألبوم جديد" : "تعديل الألبوم"])]), form);
 }
 async function openPhotoManager(root, album) {
-    root.replaceChildren(h("h2", { class: "admin-section__title" }, [`Photos \u2014 ${album.title}`]), skeletonList(2));
+    root.replaceChildren(h("h2", { class: "admin-section__title" }, [`الصور \u2014 ${album.title}`]), skeletonList(2));
     const fileInput = h("input", { type: "file", accept: "image/jpeg,image/png,image/webp", multiple: "true", class: "input" });
-    const addBtn = h("button", { class: "btn btn--primary" }, ["+ Add photos"]);
-    const backBtn = h("button", { class: "btn btn--ghost" }, ["\u2190 Back to albums"]);
+    const addBtn = h("button", { class: "btn btn--primary" }, ["+ إضافة صور"]);
+    const backBtn = h("button", { class: "btn btn--ghost" }, ["\u2192 العودة إلى الألبومات"]);
     const uploadList = h("div", { class: "upload-list" });
     const grid = h("div", { class: "admin-photo-grid" });
     addBtn.addEventListener("click", () => fileInput.click());
@@ -160,18 +165,18 @@ async function openPhotoManager(root, album) {
             }
             catch (uploadErr) {
                 task.status = "error";
-                task.error = uploadErr instanceof Error ? uploadErr.message : "Upload failed.";
+                task.error = uploadErr instanceof Error ? uploadErr.message : "فشل الرفع.";
                 row.update(task);
             }
         }
     });
-    root.replaceChildren(h("div", { class: "admin-section__header" }, [h("h2", { class: "admin-section__title" }, [`Photos \u2014 ${album.title}`]), backBtn]), h("div", { class: "upload-panel" }, [addBtn, fileInput, uploadList]), grid);
+    root.replaceChildren(h("div", { class: "admin-section__header" }, [h("h2", { class: "admin-section__title" }, [`الصور \u2014 ${album.title}`]), backBtn]), h("div", { class: "upload-panel" }, [addBtn, fileInput, uploadList]), grid);
     try {
         const photos = await getPhotos(album.album_id);
-        grid.replaceChildren(photos.length ? h("span", {}) : emptyState("No photos in this album yet."), ...photos.map((p) => photoTile(album, p, grid)));
+        grid.replaceChildren(photos.length ? h("span", {}) : emptyState("لا توجد صور في هذا الألبوم بعد."), ...photos.map((p) => photoTile(album, p, grid)));
     }
     catch {
-        grid.replaceChildren(errorState("Couldn't load photos."));
+        grid.replaceChildren(errorState("تعذّر تحميل الصور."));
     }
 }
 function uploadRow(task) {
@@ -193,19 +198,19 @@ function uploadRow(task) {
 }
 function statusLabel(t) {
     if (t.status === "error")
-        return t.error ?? "Failed";
+        return t.error ?? "فشل";
     if (t.status === "success")
-        return "Done";
+        return "تم";
     if (t.status === "uploading")
         return `${t.progress}%`;
-    return "Queued";
+    return "في الانتظار";
 }
 function photoTile(_album, photo, _grid) {
     const img = h("img", { class: "admin-photo-tile__img", src: photo.thumbnail_url, alt: photo.filename });
-    const removeBtn = h("button", { class: "admin-photo-tile__remove", "aria-label": "Delete photo" }, ["\u00d7"]);
+    const removeBtn = h("button", { class: "admin-photo-tile__remove", "aria-label": "حذف الصورة" }, ["\u00d7"]);
     const tile = h("div", { class: "admin-photo-tile" }, [img, removeBtn]);
     removeBtn.addEventListener("click", async () => {
-        if (!confirm("Delete this photo?"))
+        if (!confirm("حذف هذه الصورة؟"))
             return;
         await deletePhoto(photo.photo_id);
         tile.remove();

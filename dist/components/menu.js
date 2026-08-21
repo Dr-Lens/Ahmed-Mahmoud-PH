@@ -1,11 +1,11 @@
 import { h, trapFocus } from "../utils/dom.js";
 import { navigate } from "../services/router.js";
 const LINKS = [
-    ["Home", "/"],
-    ["Work", "/work"],
-    ["About", "/about"],
-    ["Services", "/services"],
-    ["Contact", "/contact"],
+    ["الرئيسية", "/"],
+    ["الأعمال", "/work"],
+    ["نبذة عني", "/about"],
+    ["الخدمات", "/services"],
+    ["تواصل", "/contact"],
 ];
 let releaseFocus = null;
 export function initMenu() {
@@ -13,7 +13,7 @@ export function initMenu() {
     const overlay = document.querySelector("[data-menu-overlay]");
     if (!toggle || !overlay)
         return;
-    const nav = h("nav", { class: "menu-links", "aria-label": "Primary" }, LINKS.map(([label, href], i) => h("a", { href, "data-link": "true", class: "menu-link", style: `--i:${i}` }, [
+    const nav = h("nav", { class: "menu-links", "aria-label": "التنقل الرئيسي" }, LINKS.map(([label, href], i) => h("a", { href, "data-link": "true", class: "menu-link", style: `--i:${i}` }, [
         h("span", { class: "menu-link__index" }, [String(i + 1).padStart(2, "0")]),
         h("span", { class: "menu-link__label" }, [label]),
     ])));

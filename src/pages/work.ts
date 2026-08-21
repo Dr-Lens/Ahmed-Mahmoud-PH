@@ -6,16 +6,18 @@ import { skeletonList, errorState, emptyState } from "../components/feedback.js"
 import { setMeta } from "../services/meta.js";
 import type { Album } from "../types/index.js";
 
+const ALL_LABEL = "الكل";
+
 export async function renderWork(outlet: HTMLElement): Promise<void> {
   setMeta({
-    title: "Work — AHMED MAHMOUD PH",
-    description: "Browse the full portfolio of wedding, portrait, event, fashion and commercial photography.",
+    title: "الأعمال — أحمد محمود PH",
+    description: "تصفح كامل الأعمال من تصوير الزفاف والبورتريه والمناسبات والأزياء والتصوير التجاري.",
   });
 
   const list = h("div", { class: "album-list" }, [skeletonList(4)]);
-  const filters = h("div", { class: "filters", role: "tablist", "aria-label": "Filter by category" });
+  const filters = h("div", { class: "filters", role: "tablist", "aria-label": "التصفية حسب الفئة" });
   const page = h("div", { class: "page page--work" }, [
-    h("h1", { class: "page__title" }, ["WORK"]),
+    h("h1", { class: "page__title" }, ["الأعمال"]),
     filters,
     list,
   ]);
@@ -23,21 +25,21 @@ export async function renderWork(outlet: HTMLElement): Promise<void> {
 
   try {
     const albums = await getAlbums();
-    const categories = ["All", ...Array.from(new Set(albums.map((a) => a.category)))];
-    let active = "All";
+    const categories = [ALL_LABEL, ...Array.from(new Set(albums.map((a) => a.category)))];
+    let active = ALL_LABEL;
 
     function draw(): void {
-      const filtered = active === "All" ? albums : albums.filter((a) => a.category === active);
+      const filtered = active === ALL_LABEL ? albums : albums.filter((a) => a.category === active);
       list.replaceChildren(
         filtered.length
           ? h("div", { class: "album-list" }, filtered.map(albumCard))
-          : emptyState("No albums in this category yet.")
+          : emptyState("لا توجد أعمال في هذه الفئة بعد.")
       );
     }
 
     filters.replaceChildren(
       ...categories.map((cat) => {
-        const btn = h("button", { class: `filter-chip${cat === active ? " is-active" : ""}`, role: "tab" }, [cat.toUpperCase()]);
+        const btn = h("button", { class: `filter-chip${cat === active ? " is-active" : ""}`, role: "tab" }, [cat]);
         btn.addEventListener("click", () => {
           active = cat;
           filters.querySelectorAll(".filter-chip").forEach((c) => c.classList.remove("is-active"));
@@ -49,7 +51,7 @@ export async function renderWork(outlet: HTMLElement): Promise<void> {
     );
     draw();
   } catch {
-    list.replaceChildren(errorState("Couldn't load the portfolio.", () => renderWork(outlet)));
+    list.replaceChildren(errorState("تعذّر تحميل الأعمال.", () => renderWork(outlet)));
   }
 }
 
@@ -59,10 +61,10 @@ function albumCard(album: Album): HTMLElement {
   return h("a", { href: `/${album.slug}`, "data-link": "true", class: "album-card" }, [
     h("div", { class: "album-card__image-wrap" }, [img]),
     h("div", { class: "album-card__meta" }, [
-      h("span", { class: "album-card__category" }, [album.category.toUpperCase()]),
+      h("span", { class: "album-card__category" }, [album.category]),
       h("h3", { class: "album-card__title" }, [album.title]),
       h("p", { class: "album-card__sub" }, [`${album.location} \u2014 ${formatDate(album.date, { yearOnly: true })}`]),
-      h("span", { class: "album-card__link" }, ["VIEW STORY \u2192"]),
+      h("span", { class: "album-card__link" }, ["عرض القصة \u2190"]),
     ]),
   ]);
 }
