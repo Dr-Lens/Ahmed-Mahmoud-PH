@@ -9,13 +9,13 @@ Single data row (row 2). If empty, the API returns sensible defaults.
 |---|---|---|---|---|---|---|---|---|---|
 
 ## ADMINS
-Never store plaintext passwords. Populate via the `setupAdmin_()` helper in `Auth.gs` — do not type a password directly into this sheet.
+Never store plaintext passwords. Populate via the `setupAdmin_()` helper in `Code.gs` — do not type a password directly into this sheet.
 
 | username | password_hash | password_salt | created_at |
 |---|---|---|---|
 
 ## SESSIONS
-Managed entirely by the backend (`Auth.gs`). Leave empty; rows are created on login and removed on logout/expiry.
+Managed entirely by the backend (`Code.gs`). Leave empty; rows are created on login and removed on logout/expiry.
 
 | token | username | expires_at | created_at |
 |---|---|---|---|

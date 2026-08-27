@@ -9,6 +9,7 @@ import { renderContact } from "./pages/contact.js";
 import { renderAdminLogin } from "./pages/admin/login.js";
 import { renderAdminDashboard } from "./pages/admin/dashboard.js";
 import { isAuthenticated } from "./api/auth.js";
+import { getSettings } from "./api/settings.js";
 import { CONFIG } from "./config.js";
 
 function buildShell(): HTMLElement {
@@ -26,9 +27,28 @@ function renderAdminRoute(outlet: HTMLElement): void {
   isAuthenticated() ? renderAdminDashboard(outlet) : renderAdminLogin(outlet);
 }
 
+/**
+ * The header ships with a static fallback name so it never renders blank,
+ * then swaps in the real value from Settings once it loads. This is the
+ * one thing in the header that Settings → "اسم الموقع" actually controls —
+ * the logo image itself is a fixed brand asset and is never overwritten.
+ */
+async function applySiteName(): Promise<void> {
+  const nameEl = document.querySelector<HTMLElement>("[data-site-name]");
+  if (!nameEl) return;
+  try {
+    const settings = await getSettings();
+    if (settings.site_name) nameEl.textContent = settings.site_name;
+  } catch {
+    // Keep the static fallback already in the markup — a failed settings
+    // fetch shouldn't leave the header blank.
+  }
+}
+
 function main(): void {
   const outlet = buildShell();
   initMenu();
+  applySiteName();
 
   route("/", () => renderHome(outlet));
   route("/work", () => renderWork(outlet));
