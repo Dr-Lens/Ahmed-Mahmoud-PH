@@ -64,18 +64,24 @@ async function request<T>(
   let res: Response;
   try {
     res = await fetch(url, init);
-  } catch {
+  } catch (err) {
+    // Log the real browser error (CORS, DNS, offline, etc.) — the message
+    // shown to the person stays generic, but this makes the actual cause
+    // visible in DevTools → Console instead of disappearing silently.
+    console.error(`API request failed: ${method} ${action}`, err);
     throw new ApiError("NETWORK_ERROR", "Something went wrong. Please check your connection and try again.");
   }
 
   if (!res.ok) {
+    console.error(`API request failed: ${method} ${action} — HTTP ${res.status}`);
     throw new ApiError("HTTP_ERROR", "Something went wrong. Please try again.");
   }
 
   let body: ApiResponse<T>;
   try {
     body = await res.json();
-  } catch {
+  } catch (err) {
+    console.error(`API response was not valid JSON: ${method} ${action}`, err);
     throw new ApiError("PARSE_ERROR", "Something went wrong. Please try again.");
   }
 
