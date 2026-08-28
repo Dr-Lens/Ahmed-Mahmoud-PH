@@ -1,6 +1,7 @@
 import { h, trapFocus } from "../utils/dom.js";
 import { preload } from "../utils/lazyload.js";
 import { CONFIG } from "../config.js";
+import { loadStylesheet } from "../utils/loadStylesheet.js";
 import type { Photo } from "../types/index.js";
 
 let root: HTMLElement | null = null;
@@ -25,6 +26,7 @@ function getRoot(): HTMLElement {
 }
 
 export function openViewer(list: Photo[], startIndex: number): void {
+  loadStylesheet("src/styles/viewer.css");
   photos = list;
   index = startIndex;
   const el = getRoot();

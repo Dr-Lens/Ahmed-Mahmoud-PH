@@ -2,12 +2,6 @@ import { h, mount } from "../../utils/dom.js";
 import { isAuthenticated, logout } from "../../api/auth.js";
 import { navigate } from "../../services/router.js";
 import { setMeta } from "../../services/meta.js";
-import { renderOverview } from "./sections/overview.js";
-import { renderAlbumsSection } from "./sections/albums.js";
-import { renderSettingsSection } from "./sections/settings.js";
-import { renderServicesSection } from "./sections/services.js";
-import { renderSocialSection } from "./sections/social.js";
-import { renderBeforeAfterSection } from "./sections/beforeAfter.js";
 
 type Tab = "overview" | "albums" | "settings" | "services" | "social" | "beforeAfter";
 
@@ -19,6 +13,17 @@ const TABS: [Tab, string][] = [
   ["beforeAfter", "قبل / بعد"],
   ["settings", "الإعدادات"],
 ];
+
+// Loaded on first use of each tab rather than all six eagerly whenever
+// /admin renders — most sessions only touch one or two tabs.
+const SECTION_LOADERS: Record<Tab, () => Promise<(el: HTMLElement) => void>> = {
+  overview: async () => (await import("./sections/overview.js")).renderOverview,
+  albums: async () => (await import("./sections/albums.js")).renderAlbumsSection,
+  settings: async () => (await import("./sections/settings.js")).renderSettingsSection,
+  services: async () => (await import("./sections/services.js")).renderServicesSection,
+  social: async () => (await import("./sections/social.js")).renderSocialSection,
+  beforeAfter: async () => (await import("./sections/beforeAfter.js")).renderBeforeAfterSection,
+};
 
 export function renderAdminDashboard(outlet: HTMLElement): void {
   if (!isAuthenticated()) {
@@ -48,17 +53,10 @@ export function renderAdminDashboard(outlet: HTMLElement): void {
     navigate("/admin", true);
   });
 
-  function setTab(tab: Tab): void {
+  async function setTab(tab: Tab): Promise<void> {
     tabButtons.forEach((btn, id) => btn.classList.toggle("is-active", id === tab));
-    const renderers: Record<Tab, (el: HTMLElement) => void> = {
-      overview: renderOverview,
-      albums: renderAlbumsSection,
-      settings: renderSettingsSection,
-      services: renderServicesSection,
-      social: renderSocialSection,
-      beforeAfter: renderBeforeAfterSection,
-    };
-    renderers[tab](content);
+    const render = await SECTION_LOADERS[tab]();
+    render(content);
   }
 
   const page = h("div", { class: "admin" }, [

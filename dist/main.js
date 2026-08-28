@@ -1,16 +1,19 @@
 import { route, notFound, startRouter } from "./services/router.js";
 import { initMenu } from "./components/menu.js";
-import { renderHome } from "./pages/home.js";
-import { renderWork } from "./pages/work.js";
-import { renderAlbum } from "./pages/album.js";
-import { renderAbout } from "./pages/about.js";
-import { renderServices } from "./pages/services.js";
-import { renderContact } from "./pages/contact.js";
-import { renderAdminLogin } from "./pages/admin/login.js";
-import { renderAdminDashboard } from "./pages/admin/dashboard.js";
 import { isAuthenticated } from "./api/auth.js";
 import { getSettings } from "./api/settings.js";
 import { CONFIG } from "./config.js";
+import { loadStylesheet } from "./utils/loadStylesheet.js";
+/**
+ * PERFORMANCE: every route below is a dynamic import() rather than a
+ * top-of-file static import. With native ES modules and no bundler, a
+ * static `import { renderX } from "./pages/x.js"` at the top of main.ts
+ * is fetched and parsed immediately on every single visit — including all
+ * six admin section files, the admin dashboard shell, and the login page,
+ * none of which a public visitor ever touches. Dynamic imports defer that
+ * fetch until the matching route is actually visited, so a visit to "/"
+ * only ever loads home.js and its own dependencies.
+ */
 function buildShell() {
     const outlet = document.getElementById("outlet");
     if (!outlet)
@@ -22,8 +25,18 @@ function buildShell() {
  * routes) so every route in the app is exactly one top-level segment — see
  * services/router.ts for why that matters on a GitHub Pages project site.
  */
-function renderAdminRoute(outlet) {
-    isAuthenticated() ? renderAdminDashboard(outlet) : renderAdminLogin(outlet);
+async function renderAdminRoute(outlet) {
+    // admin.css is only ever needed on this route — see loadStylesheet's
+    // comment for why it isn't in index.html's initial <link> list.
+    loadStylesheet("src/styles/admin.css");
+    if (isAuthenticated()) {
+        const { renderAdminDashboard } = await import("./pages/admin/dashboard.js");
+        renderAdminDashboard(outlet);
+    }
+    else {
+        const { renderAdminLogin } = await import("./pages/admin/login.js");
+        renderAdminLogin(outlet);
+    }
 }
 /**
  * The header ships with a static fallback name so it never renders blank,
@@ -49,13 +62,31 @@ function main() {
     const outlet = buildShell();
     initMenu();
     applySiteName();
-    route("/", () => renderHome(outlet));
-    route("/work", () => renderWork(outlet));
-    route("/about", () => renderAbout(outlet));
-    route("/services", () => renderServices(outlet));
-    route("/contact", () => renderContact(outlet));
+    route("/", async () => {
+        const { renderHome } = await import("./pages/home.js");
+        renderHome(outlet);
+    });
+    route("/work", async () => {
+        const { renderWork } = await import("./pages/work.js");
+        renderWork(outlet);
+    });
+    route("/about", async () => {
+        const { renderAbout } = await import("./pages/about.js");
+        renderAbout(outlet);
+    });
+    route("/services", async () => {
+        const { renderServices } = await import("./pages/services.js");
+        renderServices(outlet);
+    });
+    route("/contact", async () => {
+        const { renderContact } = await import("./pages/contact.js");
+        renderContact(outlet);
+    });
     route("/admin", () => renderAdminRoute(outlet));
-    route("/:slug", (params) => renderAlbum(outlet, params.slug));
+    route("/:slug", async (params) => {
+        const { renderAlbum } = await import("./pages/album.js");
+        renderAlbum(outlet, params.slug);
+    });
     notFound(() => {
         outlet.innerHTML = "";
         const el = document.createElement("div");

@@ -12,13 +12,16 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- Only weights actually referenced in CSS (400 default, 500, 600) — 700 was
+       being downloaded on every visit but never applied anywhere. -->
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600&family=Tajawal:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="src/styles/tokens.css" />
   <link rel="stylesheet" href="src/styles/base.css" />
   <link rel="stylesheet" href="src/styles/components.css" />
-  <link rel="stylesheet" href="src/styles/viewer.css" />
-  <link rel="stylesheet" href="src/styles/admin.css" />
+  <!-- viewer.css and admin.css are loaded on demand (see src/utils/loadStylesheet.ts)
+       — most visits never open the fullscreen viewer or the admin panel,
+       so there's no reason to block every page load on them. -->
 
   <script>
     // Pairs with the redirect in 404.html: if we arrived here carrying a

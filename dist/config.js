@@ -9,7 +9,7 @@ export const CONFIG = {
      * Leave empty to run the site in MOCK mode against local placeholder data
      * (useful for design/dev before the backend is deployed).
      */
-    API_BASE_URL: "https://script.google.com/macros/s/AKfycbyLFzGWVg71tzXZsawi9PiS4ANthQOLhyuMzn9gIFsUqejKFYxlVOGvDE4vSRRLZOg9hQ/exec",
+    API_BASE_URL: "",
     /** Falls back to bundled placeholder content when API_BASE_URL is empty. */
     get USE_MOCK() {
         return this.API_BASE_URL.trim().length === 0;
