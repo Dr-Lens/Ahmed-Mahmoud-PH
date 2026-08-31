@@ -8,7 +8,8 @@ export async function renderServicesSection(root: HTMLElement): Promise<void> {
   try {
     const services = await getServices();
     root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الخدمات"]), h("div", { class: "admin-service-list" }, services.map(row)));
-  } catch {
+  } catch (err) {
+    console.error("[Services] failed to load:", err);
     root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الخدمات"]), errorState("تعذّر تحميل الخدمات.", () => renderServicesSection(root)));
   }
 }
@@ -24,7 +25,8 @@ function row(service: Service): HTMLElement {
     try {
       await updateService(service.service_id, { title: title.value, description: desc.value, visible: visible.checked });
       saveBtn.textContent = "تم الحفظ";
-    } catch {
+    } catch (err) {
+      console.error("[Services] failed to save:", err);
       saveBtn.textContent = "فشل الحفظ";
     } finally {
       setTimeout(() => (saveBtn.textContent = "حفظ"), 1500);

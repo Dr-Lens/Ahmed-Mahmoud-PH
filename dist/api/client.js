@@ -67,6 +67,7 @@ async function request(action, method, payload, opts = {}) {
         throw new ApiError("PARSE_ERROR", "Something went wrong. Please try again.");
     }
     if (!body.ok) {
+        console.error(`API returned an error: ${method} ${action} — ${body.error.code}: ${body.error.message}`);
         if (body.error.code === "SESSION_EXPIRED" || body.error.code === "UNAUTHORIZED") {
             clearSession();
             throw new SessionExpiredError();

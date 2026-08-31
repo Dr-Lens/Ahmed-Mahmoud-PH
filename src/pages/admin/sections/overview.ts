@@ -18,7 +18,8 @@ export async function renderOverview(root: HTMLElement): Promise<void> {
         statCard("المميزة", String(featured)),
       ])
     );
-  } catch {
+  } catch (err) {
+    console.error("[Overview] failed to load:", err);
     root.replaceChildren(h("h2", { class: "admin-section__title" }, ["نظرة عامة"]), errorState("تعذّر تحميل النظرة العامة.", () => renderOverview(root)));
   }
 }

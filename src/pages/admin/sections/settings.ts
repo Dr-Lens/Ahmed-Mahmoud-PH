@@ -9,7 +9,8 @@ export async function renderSettingsSection(root: HTMLElement): Promise<void> {
   try {
     const settings = await getSettings();
     draw(root, settings);
-  } catch {
+  } catch (err) {
+    console.error("[Settings] failed to load:", err);
     root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الإعدادات"]), errorState("تعذّر تحميل الإعدادات.", () => renderSettingsSection(root)));
   }
 }
@@ -60,7 +61,8 @@ function draw(root: HTMLElement, settings: SiteSettings): void {
     try {
       await updateSettings(patch);
       savedMsg.textContent = "تم الحفظ.";
-    } catch {
+    } catch (err) {
+      console.error("[Settings] failed to save:", err);
       savedMsg.textContent = "تعذّر الحفظ. من فضلك حاول مرة أخرى.";
     } finally {
       saveBtn.removeAttribute("disabled");

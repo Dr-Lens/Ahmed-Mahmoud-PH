@@ -8,7 +8,8 @@ export async function renderBeforeAfterSection(root: HTMLElement): Promise<void>
   try {
     const projects = await getBeforeAfter();
     draw(root, projects);
-  } catch {
+  } catch (err) {
+    console.error("[BeforeAfter] failed to load:", err);
     root.replaceChildren(h("h2", { class: "admin-section__title" }, ["قبل / بعد"]), errorState("تعذّر تحميل المشاريع.", () => renderBeforeAfterSection(root)));
   }
 }
@@ -21,15 +22,20 @@ function draw(root: HTMLElement, projects: BeforeAfter[]): void {
 
   addBtn.addEventListener("click", async () => {
     if (!title.value.trim() || !before.value.trim() || !after.value.trim()) return;
-    await createBeforeAfter({
-      title: title.value.trim(),
-      before_url: before.value.trim(),
-      after_url: after.value.trim(),
-      description: "",
-      visible: true,
-      sort_order: projects.length + 1,
-    });
-    renderBeforeAfterSection(root);
+    try {
+      await createBeforeAfter({
+        title: title.value.trim(),
+        before_url: before.value.trim(),
+        after_url: after.value.trim(),
+        description: "",
+        visible: true,
+        sort_order: projects.length + 1,
+      });
+      renderBeforeAfterSection(root);
+    } catch (err) {
+      console.error("[BeforeAfter] failed to create:", err);
+      alert("تعذّر إضافة المشروع. من فضلك حاول مرة أخرى.");
+    }
   });
 
   const list = projects.length
@@ -47,8 +53,13 @@ function row(root: HTMLElement, project: BeforeAfter): HTMLElement {
   const deleteBtn = h("button", { class: "btn btn--ghost btn--small btn--danger" }, ["حذف"]);
   deleteBtn.addEventListener("click", async () => {
     if (!confirm(`حذف "${project.title}"؟`)) return;
-    await deleteBeforeAfter(project.project_id);
-    renderBeforeAfterSection(root);
+    try {
+      await deleteBeforeAfter(project.project_id);
+      renderBeforeAfterSection(root);
+    } catch (err) {
+      console.error("[BeforeAfter] failed to delete:", err);
+      alert("تعذّر حذف المشروع. من فضلك حاول مرة أخرى.");
+    }
   });
   return h("div", { class: "admin-album-row" }, [
     h("img", { class: "admin-album-row__cover", src: project.after_url, alt: "" }),

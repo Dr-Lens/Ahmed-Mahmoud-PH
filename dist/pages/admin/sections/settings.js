@@ -7,7 +7,8 @@ export async function renderSettingsSection(root) {
         const settings = await getSettings();
         draw(root, settings);
     }
-    catch {
+    catch (err) {
+        console.error("[Settings] failed to load:", err);
         root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الإعدادات"]), errorState("تعذّر تحميل الإعدادات.", () => renderSettingsSection(root)));
     }
 }
@@ -50,7 +51,8 @@ function draw(root, settings) {
             await updateSettings(patch);
             savedMsg.textContent = "تم الحفظ.";
         }
-        catch {
+        catch (err) {
+            console.error("[Settings] failed to save:", err);
             savedMsg.textContent = "تعذّر الحفظ. من فضلك حاول مرة أخرى.";
         }
         finally {

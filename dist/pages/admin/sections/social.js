@@ -13,7 +13,8 @@ export async function renderSocialSection(root) {
         const links = await getSocial();
         draw(root, links);
     }
-    catch {
+    catch (err) {
+        console.error("[Social] failed to load:", err);
         root.replaceChildren(h("h2", { class: "admin-section__title" }, ["التواصل الاجتماعي"]), errorState("تعذّر تحميل روابط التواصل.", () => renderSocialSection(root)));
     }
 }
@@ -35,7 +36,8 @@ function draw(root, links) {
             await updateSocial(updated);
             saveBtn.textContent = "تم الحفظ";
         }
-        catch {
+        catch (err) {
+            console.error("[Social] failed to save:", err);
             saveBtn.textContent = "فشل الحفظ";
         }
         finally {

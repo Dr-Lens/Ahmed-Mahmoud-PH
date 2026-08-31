@@ -14,7 +14,8 @@ export async function renderAlbumsSection(root) {
         const albums = await getAdminAlbums();
         draw(root, albums);
     }
-    catch {
+    catch (err) {
+        console.error("[Albums] failed to load:", err);
         root.replaceChildren(h("h2", { class: "admin-section__title" }, ["الألبومات"]), errorState("تعذّر تحميل الألبومات.", () => renderAlbumsSection(root)));
     }
 }
@@ -40,23 +41,41 @@ function albumRow(root, album) {
         album.featured ? "مميز" : "تمييز",
     ]);
     featureBtn.addEventListener("click", async () => {
-        const updated = await updateAlbum(album.album_id, { featured: !album.featured });
-        Object.assign(album, updated);
-        draw(root, await getAdminAlbums());
+        try {
+            const updated = await updateAlbum(album.album_id, { featured: !album.featured });
+            Object.assign(album, updated);
+            draw(root, await getAdminAlbums());
+        }
+        catch (err) {
+            console.error("[Albums] failed to toggle featured:", err);
+            alert("تعذّر تحديث الألبوم. من فضلك حاول مرة أخرى.");
+        }
     });
     const statusBtn = h("button", { class: "btn btn--chip" }, [STATUS_LABEL[album.status]]);
     statusBtn.addEventListener("click", async () => {
-        const next = album.status === "PUBLIC" ? "DRAFT" : "PUBLIC";
-        const updated = await updateAlbum(album.album_id, { status: next, visible: next === "PUBLIC" });
-        Object.assign(album, updated);
-        draw(root, await getAdminAlbums());
+        try {
+            const next = album.status === "PUBLIC" ? "DRAFT" : "PUBLIC";
+            const updated = await updateAlbum(album.album_id, { status: next, visible: next === "PUBLIC" });
+            Object.assign(album, updated);
+            draw(root, await getAdminAlbums());
+        }
+        catch (err) {
+            console.error("[Albums] failed to toggle status:", err);
+            alert("تعذّر تحديث الألبوم. من فضلك حاول مرة أخرى.");
+        }
     });
     const deleteBtn = h("button", { class: "btn btn--ghost btn--small btn--danger" }, ["حذف"]);
     deleteBtn.addEventListener("click", async () => {
         if (!confirm(`حذف "${album.title}"؟ لا يمكن التراجع عن هذا الإجراء.`))
             return;
-        await deleteAlbum(album.album_id);
-        draw(root, await getAdminAlbums());
+        try {
+            await deleteAlbum(album.album_id);
+            draw(root, await getAdminAlbums());
+        }
+        catch (err) {
+            console.error("[Albums] failed to delete:", err);
+            alert("تعذّر حذف الألبوم. من فضلك حاول مرة أخرى.");
+        }
     });
     return h("div", { class: "admin-album-row" }, [
         h("img", { class: "admin-album-row__cover", src: album.cover_url, alt: "" }),
@@ -175,7 +194,8 @@ async function openPhotoManager(root, album) {
         const photos = await getPhotos(album.album_id);
         grid.replaceChildren(photos.length ? h("span", {}) : emptyState("لا توجد صور في هذا الألبوم بعد."), ...photos.map((p) => photoTile(album, p, grid)));
     }
-    catch {
+    catch (err) {
+        console.error("[Albums] failed to load photos:", err);
         grid.replaceChildren(errorState("تعذّر تحميل الصور."));
     }
 }
@@ -212,8 +232,14 @@ function photoTile(_album, photo, _grid) {
     removeBtn.addEventListener("click", async () => {
         if (!confirm("حذف هذه الصورة؟"))
             return;
-        await deletePhoto(photo.photo_id);
-        tile.remove();
+        try {
+            await deletePhoto(photo.photo_id);
+            tile.remove();
+        }
+        catch (err) {
+            console.error("[Albums] failed to delete photo:", err);
+            alert("تعذّر حذف الصورة. من فضلك حاول مرة أخرى.");
+        }
     });
     return tile;
 }
