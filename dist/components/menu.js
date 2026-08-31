@@ -11,13 +11,14 @@ let releaseFocus = null;
 export function initMenu() {
     const toggle = document.querySelector("[data-menu-toggle]");
     const overlay = document.querySelector("[data-menu-overlay]");
-    if (!toggle || !overlay)
+    const closeBtn = document.querySelector("[data-menu-close]");
+    const linksSlot = document.querySelector("[data-menu-links]");
+    if (!toggle || !overlay || !closeBtn || !linksSlot)
         return;
-    const nav = h("nav", { class: "menu-links", "aria-label": "التنقل الرئيسي" }, LINKS.map(([label, href], i) => h("a", { href, "data-link": "true", class: "menu-link", style: `--i:${i}` }, [
+    linksSlot.replaceChildren(...LINKS.map(([label, href], i) => h("a", { href, "data-link": "true", class: "menu-link", style: `--i:${i}` }, [
         h("span", { class: "menu-link__index" }, [String(i + 1).padStart(2, "0")]),
         h("span", { class: "menu-link__label" }, [label]),
     ])));
-    overlay.replaceChildren(nav);
     function open() {
         overlay.classList.add("is-open");
         toggle.setAttribute("aria-expanded", "true");
@@ -34,7 +35,8 @@ export function initMenu() {
     toggle.addEventListener("click", () => {
         overlay.classList.contains("is-open") ? close() : open();
     });
-    overlay.addEventListener("click", (e) => {
+    closeBtn.addEventListener("click", close);
+    linksSlot.addEventListener("click", (e) => {
         if (e.target.closest(".menu-link"))
             close();
     });

@@ -14,19 +14,18 @@ let releaseFocus: (() => void) | null = null;
 export function initMenu(): void {
   const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
   const overlay = document.querySelector<HTMLElement>("[data-menu-overlay]");
-  if (!toggle || !overlay) return;
+  const closeBtn = document.querySelector<HTMLButtonElement>("[data-menu-close]");
+  const linksSlot = document.querySelector<HTMLElement>("[data-menu-links]");
+  if (!toggle || !overlay || !closeBtn || !linksSlot) return;
 
-  const nav = h(
-    "nav",
-    { class: "menu-links", "aria-label": "التنقل الرئيسي" },
-    LINKS.map(([label, href], i) =>
+  linksSlot.replaceChildren(
+    ...LINKS.map(([label, href], i) =>
       h("a", { href, "data-link": "true", class: "menu-link", style: `--i:${i}` }, [
         h("span", { class: "menu-link__index" }, [String(i + 1).padStart(2, "0")]),
         h("span", { class: "menu-link__label" }, [label]),
       ])
     )
   );
-  overlay.replaceChildren(nav);
 
   function open() {
     overlay!.classList.add("is-open");
@@ -45,7 +44,8 @@ export function initMenu(): void {
   toggle.addEventListener("click", () => {
     overlay.classList.contains("is-open") ? close() : open();
   });
-  overlay.addEventListener("click", (e) => {
+  closeBtn.addEventListener("click", close);
+  linksSlot.addEventListener("click", (e) => {
     if ((e.target as HTMLElement).closest(".menu-link")) close();
   });
   document.addEventListener("keydown", (e) => {

@@ -62,9 +62,15 @@
     <footer class="site-footer" data-public-chrome>
       &copy; <span id="year"></span> أحمد محمود PH. جميع الحقوق محفوظة.
     </footer>
-  </div>
 
-  <div class="menu-overlay" data-menu-overlay></div>
+    <div class="menu-overlay" data-menu-overlay>
+      <div class="menu-overlay__top">
+        <img src="public/assets/logo.webp" alt="أحمد محمود PH" class="menu-overlay__logo" />
+        <button class="menu-overlay__close" data-menu-close aria-label="إغلاق القائمة">×</button>
+      </div>
+      <nav class="menu-links" data-menu-links aria-label="التنقل الرئيسي"></nav>
+    </div>
+  </div>
 
   <script>
     document.getElementById("year").textContent = String(new Date().getFullYear());

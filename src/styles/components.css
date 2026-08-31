@@ -39,21 +39,46 @@
 .menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 .menu-overlay {
-  position: fixed;
+  position: absolute; /* constrained to .app-shell (the centered mobile canvas),
+                          not the full browser viewport — see app-shell in base.css */
   inset: 0;
   background: var(--color-black);
   color: var(--color-white);
   z-index: 50;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration-med) var(--ease-editorial);
 }
 .menu-overlay.is-open { opacity: 1; pointer-events: auto; }
 
-.menu-links { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-6); }
+.menu-overlay__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.menu-overlay__logo { height: 24px; width: auto; filter: invert(1); }
+.menu-overlay__close {
+  color: var(--color-white);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: var(--space-2) var(--space-3);
+  opacity: 0.85;
+  transition: opacity var(--duration-fast) var(--ease-editorial);
+}
+.menu-overlay__close:hover { opacity: 1; }
+
+.menu-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-6);
+}
 .menu-link {
   display: flex;
   align-items: baseline;
@@ -61,11 +86,15 @@
   font-family: var(--font-display);
   font-size: 1.9rem;
   letter-spacing: 0.02em;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   opacity: 0;
   transform: translateY(10px);
+  transition: opacity var(--duration-fast) var(--ease-editorial);
   animation: menu-in var(--duration-med) var(--ease-editorial) forwards;
   animation-delay: calc(var(--i, 0) * 45ms);
 }
+.menu-link:hover { opacity: 0.75; }
 .menu-overlay.is-open .menu-link { animation-name: menu-in; }
 @keyframes menu-in { to { opacity: 1; transform: translateY(0); } }
 .menu-link__index { font-family: var(--font-body); font-size: 0.75rem; color: #8a8a8a; }
