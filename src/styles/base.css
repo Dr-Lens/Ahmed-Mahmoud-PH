@@ -40,6 +40,20 @@ h1, h2, h3, p { margin: 0; }
   box-shadow: 0 0 0 1px var(--color-line);
 }
 
+/* Responsive canvas: mobile stays a fixed narrow column (the original
+   design target), but tablet/desktop get progressively more breathing
+   room instead of an ever-widening gray letterbox on either side.
+   Breakpoints: >=640px tablet, >=1024px small desktop, >=1440px wide desktop. */
+@media (min-width: 640px) {
+  :root { --canvas-max: 720px; }
+}
+@media (min-width: 1024px) {
+  :root { --canvas-max: 1040px; }
+}
+@media (min-width: 1440px) {
+  :root { --canvas-max: 1200px; }
+}
+
 @media (min-width: 481px) {
   body { background: var(--color-bg-secondary); }
 }

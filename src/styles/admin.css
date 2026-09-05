@@ -4,6 +4,32 @@
   font-family: var(--font-body);
 }
 
+/* Sidebar layout instead of a horizontal scrolling tab strip once there's
+   enough width for it — the mobile tab-scroller pattern doesn't make sense
+   to keep once the screen is wide enough for a proper app-style sidebar. */
+@media (min-width: 900px) {
+  .admin {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .admin-header { grid-column: 1 / -1; grid-row: 1; }
+  .admin-nav {
+    grid-column: 1;
+    grid-row: 2;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-x: visible;
+    padding: var(--space-4);
+    gap: var(--space-1);
+    border-inline-end: 1px solid var(--color-line);
+    border-bottom: none;
+    align-self: start;
+  }
+  .admin-nav__item { text-align: start; border-radius: var(--radius); padding: var(--space-3) var(--space-4); }
+  .admin-content { grid-column: 2; grid-row: 2; padding: var(--space-6); }
+}
+
 .admin-login {
   display: flex;
   flex-direction: column;
@@ -59,6 +85,12 @@
 .stat-card__label { font-size: 0.625rem; letter-spacing: var(--tracking-wide); color: var(--color-text-muted); }
 
 .admin-album-list, .admin-service-list { display: flex; flex-direction: column; gap: var(--space-3); }
+@media (min-width: 700px) {
+  .admin-album-list { display: grid; grid-template-columns: repeat(2, 1fr); align-items: start; }
+}
+@media (min-width: 1300px) {
+  .admin-album-list { grid-template-columns: repeat(3, 1fr); }
+}
 .admin-album-row {
   display: flex;
   gap: var(--space-3);
@@ -73,6 +105,9 @@
 .admin-album-row__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
 
 .admin-form { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius); padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+@media (min-width: 900px) {
+  .admin-form { max-width: 640px; }
+}
 .admin-form__actions { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
 .admin-form__saved { font-size: var(--step-caption); color: var(--color-text-muted); min-height: 1.2em; }
 
@@ -91,6 +126,12 @@
 .upload-row__status { flex: none; width: 60px; text-align: end; color: var(--color-text-muted); }
 
 .admin-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+@media (min-width: 700px) {
+  .admin-photo-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 1300px) {
+  .admin-photo-grid { grid-template-columns: repeat(6, 1fr); }
+}
 .admin-photo-tile { position: relative; aspect-ratio: 1; background: var(--color-bg-secondary); overflow: hidden; border-radius: var(--radius); }
 .admin-photo-tile__img { width: 100%; height: 100%; object-fit: cover; }
 .admin-photo-tile__remove {
